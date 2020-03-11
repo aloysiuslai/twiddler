@@ -1,27 +1,113 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
+    <link href="https://fonts.googleapis.com/css?family=Oxanium&display=swap" rel="stylesheet">
+    <link href="index.css" rel="stylesheet">
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
-  </head>
-  <body>
+    <title>Project Twiddler</title>
+</head>
+
+<body>
+    <div class='container'>
+        <h1 class='title'>Project Twiddler</h1>
+        <div class='twitterFeed'>
+        </div>
+    </div>
     <script>
+    $(function() {
+        var $body = $('.tweets');
 
-      $(document).ready(function(){
-        var $body = $('body');
-        $body.html('');
-
+        //generates 1st 11 tweet that is displayed
         var index = streams.home.length - 1;
-        while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
-          index -= 1;
+        while (index >= 0) {
+            var tweet = streams.home[index];
+            var $tweet = $('<div class=tweet></div>').addClass(tweet.user).appendTo('.twitterFeed');
+
+            // Created Timestamp
+            var monthNames = [
+                "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+            ];
+
+            var currentDate = new Date();
+            var date = currentDate.getDate();
+            var month = currentDate.getMonth();
+            var year = currentDate.getFullYear();
+            var hour = currentDate.getHours();
+            var min = currentDate.getMinutes();
+            if (min < 10) {
+                min = "0" + min;
+            }
+            var created = monthNames[month] + " " + (date) + ", " + year + " " + hour + ":" + min;
+            // var created = new Date().toLocaleString();
+            var fullTweet = $tweet.html('@' + tweet.user + ' - ' + created + '<br/>' + tweet.message);
+            // fullTweet.html(fullTweet.html().replace(/\n/g,'<br/>'));
+
+            $tweet.appendTo('.twitterFeed');
+            index -= 1;
         }
+        // Create button that generates new tweets
 
-      });
+        var $LoadNewButton = $("<button id='NewTweetButton'>Load Tweets</button>")
+        $LoadNewButton.insertAfter('.title');
 
+        //Creates button to return to feed
+        var $HomeButton = $("<button id='HomeButton'>Return to Feed</button>");
+        $HomeButton.insertAfter('.title');
+        $HomeButton.hide();
+
+        //Click event to generate and load new tweets
+        $LoadNewButton.on('click', function(event) {
+            generateRandomTweet();
+            var newTweet = streams.home.pop();
+            var $tweet = $('<div class=tweet></div>').addClass(newTweet.user).appendTo('.twitterFeed');
+            var monthNames = [
+                "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"
+            ];
+            // Created Timestamp
+            var currentDate = new Date();
+            var date = currentDate.getDate();
+            var month = currentDate.getMonth();
+            var year = currentDate.getFullYear();
+            var hour = currentDate.getHours();
+            var min = currentDate.getMinutes();
+            if (min < 10) { min = "0" + min; }
+            var created = monthNames[month] + " " + (date) + ", " + year + " " + hour + ":" + min;
+            // var created = new Date().toLocaleString();
+
+            var fullTweet = $tweet.html('@' + newTweet.user + ' - ' + created + '<br/>' + newTweet.message).on('click', function() {
+                event.preventDefault();
+                var username = $(this).attr("class").split(" ")[1];
+                $('.tweet').hide();
+                $('.' + username).show();
+                // $HomeButton.insertAfter('.title');
+                $LoadNewButton.hide();
+                $HomeButton.show();
+            });
+            $tweet.prependTo('.twitterFeed');
+        })
+
+        // Click event to go into user history
+        $('.tweet').on('click', function(event) {
+            event.preventDefault();
+            var username = $(this).attr("class").split(" ")[1];
+            $('.tweet').hide();
+            $('.' + username).show();
+            // $HomeButton.insertAfter('.title');
+            $LoadNewButton.hide();
+            $HomeButton.show();
+        });
+        //Click event to return from user history to feed
+        $HomeButton.on('click', function(event) {
+            event.preventDefault();
+            $('.tweet').show();
+            $HomeButton.hide();
+            $LoadNewButton.show();
+
+        })
+    });
     </script>
-  </body>
+</body>
+
 </html>

@@ -1,0 +1,36 @@
+body {
+    background: powderblue;
+}
+
+.container {
+    width: 35%;
+    margin: auto;
+}
+
+.title {
+    color: white;
+    font-family: 'Oxanium';
+    font-size: 50px;
+    font-weight: normal;
+    line-height: 100px;
+    text-align: center;
+    text-decoration: underline;
+    text-shadow: 0 1px 1px black;
+}
+
+.tweet {
+    font-family: 'Georgia';
+    font-size: 20px;
+}
+
+
+#NewTweetButton,
+#HomeButton {
+    background-color: gray;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    padding: 10px 20px 11px;
+    text-shadow: 0 1px 1px black;
+    text-align: center width: 50%;
+}
